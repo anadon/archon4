@@ -1,25 +1,30 @@
-#!/bin/sh
-#
-# Makefile for building a suffix array test program.  This is to 
-# compensate for the lack of pre-existing Makefile .
-#
-# This file and the associated software is of unknown legal status and
-# unknown licensing
-#
+# Makefile for suftest
 
-##GLOBAL VARIABLES######################################################
+# sources
+OBJS					= archon.o direct.o suftest.o
+TARGET				= suftest
+MAKEFILE			= Makefile
 
-CFLAGS = -O3 -march=native -Wall
+# options
+#CC						= cc
+#OUTPUT_OPTION	= -o $@
+CFLAGS				= -O3 -fomit-frame-pointer
+CXXFLAGS			= -O3 -fomit-frame-pointer
+ARCHONOPTIONS	= -DUSE_FWAN -DUSE_BKAN -DUSE_IT2 -DREVERSED # -DVERIFY -DVERBOSE -DHAVE_MALLOC_H
+CPPFLAGS			= -Wall -DNDEBUG $(ARCHONOPTIONS)
+LDFLAGS				=
+LDLIBS				=
+#TARGET_ARCH		=
 
-SOURCE = archon3r3.c
 
-EXEC = archon3
+# targets
+.PHONY: all
+all: $(TARGET)
+$(TARGET): $(OBJS)
 
+distclean: clean
+clean:
+	$(RM) $(TARGET) $(OBJS)
 
-##STANDARD BUILD########################################################
-
-all : $(SOURCE)
-	gcc $(CFLAGS) $(SOURCE) -o $(EXEC)
-
-clean :
-	rm -f $(EXEC)
+# dependencies
+$(OBJS): *.h $(MAKEFILE)
